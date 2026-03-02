@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lucieshine Services | Pressure Washing, Painting & More</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Lucieshine Services offers professional pressure washing, exterior & interior painting, roof cleaning, and gutter cleaning for homeowners and businesses. Get a free quote today!" />
+  <meta name="keywords" content="pressure washing, exterior painting, interior painting, roof cleaning, gutter cleaning, home services, Lucieshine, local contractor" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Lucieshine Services" />
+  <link rel="canonical" href="https://lucieshineservices.com/" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Lucieshine Services" />
+  <meta property="og:description" content="Professional home & business exterior services. Book online instantly." />
+  <meta property="og:url" content="https://lucieshineservices.com/" />
+  <meta property="og:image" content="https://lucieshineservices.com/og-image.jpg" />
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#2d5a27" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Lucieshine" />
+
+  <!-- Schema.org Local Business -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Lucieshine Services",
+    "description": "Professional pressure washing, painting, roof cleaning, and gutter cleaning.",
+    "telephone": "+1-561-248-8617",
+    "priceRange": "$$",
+    "serviceArea": { "@type": "AdministrativeArea", "name": "South Florida" },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Home & Business Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pressure Washing" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Exterior Painting" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Interior Painting" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Roof Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gutter Cleaning" } }
+      ]
+    }
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- Stripe -->
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark: #1a3d16;
+      --green: #2d5a27;
+      --green-mid: #3d7a35;
+      --green-light: #5a9e50;
+      --tan: #c8a96e;
+      --tan-light: #e8d5a3;
+      --tan-pale: #f5eedc;
+      --cream: #faf6ed;
+      --dark: #111a10;
+      --text: #2a3428;
+      --text-muted: #6b7c69;
+      --white: #ffffff;
+      --radius: 12px;
+      --shadow: 0 4px 32px rgba(26,61,22,0.13);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    h1,h2,h3 { font-family: 'Playfair Display', serif; }
+
+    /* ─── ANNOUNCEMENT BAR ─── */
+    .announcement {
+      background: var(--green);
+      color: var(--tan-light);
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+    .announcement span { color: var(--tan); font-weight: 700; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(26,61,22,0.97);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 68px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--tan-light);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+    .nav-logo span { color: var(--tan); }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a {
+      color: var(--tan-light);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0.85;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--tan); }
+    .nav-cta {
+      background: var(--tan) !important;
+      color: var(--dark) !important;
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      opacity: 1 !important;
+    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 26px; height: 2px; background: var(--tan-light); border-radius: 2px; transition: 0.3s; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 92vh;
+      background:
+        linear-gradient(160deg, rgba(26,61,22,0.88) 0%, rgba(42,90,36,0.70) 60%, rgba(200,169,110,0.18) 100%),
+        url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80') center/cover no-repeat;
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+      padding: 0 8vw;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
+      background: linear-gradient(to top, var(--cream), transparent);
+    }
+    .hero-badge {
+      background: rgba(200,169,110,0.2);
+      border: 1px solid var(--tan);
+      color: var(--tan);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 50px;
+      margin-bottom: 22px;
+      display: inline-block;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      color: var(--white);
+      line-height: 1.05;
+      max-width: 700px;
+      margin-bottom: 20px;
+    }
+    .hero h1 em { color: var(--tan); font-style: normal; }
+    .hero p {
+      color: rgba(255,255,255,0.82);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--tan);
+      color: var(--dark);
+      padding: 15px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(200,169,110,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(200,169,110,0.5); }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.5);
+      padding: 13px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--tan-light); background: rgba(255,255,255,0.07); }
+    .hero-stats {
+      position: absolute; bottom: 100px; right: 8vw;
+      display: flex; gap: 32px;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--tan); font-weight: 900; }
+    .stat-label { color: rgba(255,255,255,0.65); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* ─── SECTION COMMONS ─── */
+    section { padding: 80px 8vw; }
+    .section-tag {
+      display: inline-block;
+      background: var(--tan-pale);
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 14px;
+    }
+    .section-title { font-size: clamp(2rem, 4vw, 2.8rem); color: var(--green-dark); margin-bottom: 12px; line-height: 1.15; }
+    .section-sub { color: var(--text-muted); font-size: 1.05rem; max-width: 540px; line-height: 1.7; margin-bottom: 48px; }
+
+    /* ─── SERVICES ─── */
+    #services { background: var(--white); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--cream);
+      border: 1.5px solid rgba(200,169,110,0.25);
+      border-radius: 18px;
+      padding: 32px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      cursor: default;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--green), var(--tan));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+      transform-origin: left;
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: var(--tan); }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon { font-size: 2.6rem; margin-bottom: 16px; }
+    .service-card h3 { font-size: 1.3rem; color: var(--green-dark); margin-bottom: 10px; }
+    .service-card p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; }
+    .service-price {
+      margin-top: 18px;
+      display: inline-block;
+      background: var(--green);
+      color: var(--tan-light);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 50px;
+    }
+
+    /* ─── WHY US ─── */
+    #why { background: var(--green-dark); }
+    #why .section-tag { background: rgba(200,169,110,0.15); color: var(--tan); }
+    #why .section-title { color: var(--tan-light); }
+    #why .section-sub { color: rgba(255,255,255,0.6); }
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px; }
+    .why-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(200,169,110,0.15);
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .why-item .icon { font-size: 2rem; margin-bottom: 14px; }
+    .why-item h4 { color: var(--tan-light); font-size: 1.05rem; margin-bottom: 8px; }
+    .why-item p { color: rgba(255,255,255,0.55); font-size: 0.88rem; line-height: 1.6; }
+
+    /* ─── BOOKING / QUOTE FORM ─── */
+    #booking { background: var(--tan-pale); }
+    .booking-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+    .booking-info h2 { font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--green-dark); margin-bottom: 14px; }
+    .booking-info p { color: var(--text-muted); line-height: 1.75; margin-bottom: 28px; }
+    .booking-steps { display: flex; flex-direction: column; gap: 18px; }
+    .step { display: flex; align-items: flex-start; gap: 16px; }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--green);
+      color: var(--tan-light);
+      font-weight: 700; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-text h4 { color: var(--green-dark); font-size: 0.95rem; margin-bottom: 3px; }
+    .step-text p { color: var(--text-muted); font-size: 0.85rem; }
+
+    /* Form */
+    .form-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow: 0 8px 40px rgba(26,61,22,0.1);
+    }
+    .form-card h3 { font-size: 1.5rem; color: var(--green-dark); margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .form-group label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--cream);
+      border: 1.5px solid rgba(200,169,110,0.3);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(45,90,39,0.1);
+    }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .radio-group { display: flex; gap: 12px; flex-wrap: wrap; }
+    .radio-btn input { display: none; }
+    .radio-btn label {
+      background: var(--cream);
+      border: 1.5px solid rgba(200,169,110,0.3);
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text);
+    }
+    .radio-btn input:checked + label {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--white);
+    }
+
+    /* Stripe */
+    #card-element-wrap {
+      background: var(--cream);
+      border: 1.5px solid rgba(200,169,110,0.3);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    #card-errors { color: #c0392b; font-size: 0.83rem; margin-top: 6px; min-height: 18px; }
+    .deposit-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--green), var(--green-mid));
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 18px;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 4px 20px rgba(45,90,39,0.35);
+    }
+    .submit-btn:hover { transform: translateY(-1px); opacity: 0.93; }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .form-success .check { font-size: 3.5rem; }
+    .form-success h3 { color: var(--green-dark); font-size: 1.5rem; margin: 16px 0 8px; }
+    .form-success p { color: var(--text-muted); }
+
+    /* ─── REVIEWS ─── */
+    #reviews { background: var(--white); }
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+    .review-card {
+      background: var(--cream);
+      border: 1.5px solid rgba(200,169,110,0.22);
+      border-radius: 16px;
+      padding: 28px 24px;
+    }
+    .stars { color: var(--tan); font-size: 1rem; margin-bottom: 12px; }
+    .review-card p { color: var(--text); font-size: 0.92rem; line-height: 1.7; margin-bottom: 18px; font-style: italic; }
+    .reviewer { display: flex; align-items: center; gap: 12px; }
+    .reviewer-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--green);
+      color: var(--tan-light);
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .reviewer-name { font-weight: 600; font-size: 0.9rem; color: var(--green-dark); }
+    .reviewer-type { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.7);
+      padding: 60px 8vw 32px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand .nav-logo { font-size: 1.6rem; }
+    .footer-brand p { margin-top: 14px; font-size: 0.88rem; line-height: 1.7; max-width: 320px; }
+    footer h4 { color: var(--tan-light); font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 16px; }
+    footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    footer ul li a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    footer ul li a:hover { color: var(--tan); }
+    .footer-contact li { font-size: 0.88rem; display: flex; align-items: flex-start; gap: 8px; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: gap;
+      font-size: 0.8rem;
+    }
+    .stripe-badge {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 6px 14px; border-radius: 50px;
+      font-size: 0.78rem; color: rgba(255,255,255,0.5);
+    }
+
+    /* ─── MOBILE NAV ─── */
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--green-dark);
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--tan-light);
+      text-decoration: none;
+    }
+    .mobile-close {
+      position: absolute; top: 24px; right: 24px;
+      font-size: 1.8rem;
+      color: var(--tan-light);
+      cursor: pointer;
+      background: none; border: none;
+    }
+
+    /* ─── FLOATING CTA ─── */
+    .floating-cta {
+      position: fixed; bottom: 24px; right: 24px; z-index: 90;
+      background: var(--tan);
+      color: var(--dark);
+      padding: 14px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      box-shadow: 0 6px 30px rgba(200,169,110,0.5);
+      display: flex; align-items: center; gap: 8px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width: 900px) {
+      .booking-wrap { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .hero-stats { display: none; }
+    }
+    @media(max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .form-row { grid-template-columns: 1fr; }
+      section { padding: 60px 5vw; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Announcement Bar -->
+<div class="announcement">
+  🎉 <span>Limited Time:</span> Get 25% Off Your First Pressure Wash — Book This Week!
+</div>
+
+<!-- Nav -->
+<nav>
+  <a href="#" class="nav-logo">Lucie<span>shine</span></a>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#why">Why Us</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#booking" class="nav-cta">Book Now</a>
+  </div>
+  <div class="hamburger" onclick="document.getElementById('mobileMenu').classList.add('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">✕</button>
+  <a href="#services" onclick="document.getElementById('mobileMenu').classList.remove('open')">Services</a>
+  <a href="#why" onclick="document.getElementById('mobileMenu').classList.remove('open')">Why Us</a>
+  <a href="#reviews" onclick="document.getElementById('mobileMenu').classList.remove('open')">Reviews</a>
+  <a href="#booking" onclick="document.getElementById('mobileMenu').classList.remove('open')">Book Now</a>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <span class="hero-badge">⭐ Trusted by 500+ Homeowners & Businesses</span>
+  <h1>Your Property<br/>Deserves to <em>Shine.</em></h1>
+  <p>Professional pressure washing, painting, roof cleaning & gutter cleaning. Fast quotes, easy online booking, guaranteed results.</p>
+  <div class="hero-btns">
+    <a href="#booking" class="btn-primary">Book a Service →</a>
+    <a href="tel:+15612488617" class="btn-outline">📞 Call Us Now</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Happy Clients</div></div>
+    <div class="stat"><div class="stat-num">5★</div><div class="stat-label">Avg Rating</div></div>
+    <div class="stat"><div class="stat-num">8yr</div><div class="stat-label">Experience</div></div>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <span class="section-tag">What We Do</span>
+  <h2 class="section-title">Services Built for<br/>Your Property</h2>
+  <p class="section-sub">From curb appeal to full exterior refreshes — we handle it all for homeowners and commercial properties.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🚿</div>
+      <h3>Pressure Washing</h3>
+      <p>Blast away years of grime, mold, and mildew from driveways, sidewalks, decks, fences, and building exteriors.</p>
+      <span class="service-price">Starting at $149</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎨</div>
+      <h3>Exterior Painting</h3>
+      <p>Premium paints, expert prep, and flawless application. Give your home or building a stunning, lasting facelift.</p>
+      <span class="service-price">Free Estimate</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏠</div>
+      <h3>Interior Painting</h3>
+      <p>Clean lines, rich colors, and zero mess. Transform any room with our professional interior painting team.</p>
+      <span class="service-price">Free Estimate</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏚️</div>
+      <h3>Roof Cleaning</h3>
+      <p>Safe, low-pressure soft washing removes algae, moss, and black streaks — protecting your roof and investment.</p>
+      <span class="service-price">Starting at $249</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🌿</div>
+      <h3>Gutter Cleaning</h3>
+      <p>Clogged gutters cause serious damage. We clear, flush, and inspect your gutters so water flows freely.</p>
+      <span class="service-price">Starting at $99</span>
+    </div>
+  </div>
+</section>
+
+<!-- Why Us -->
+<section id="why">
+  <span class="section-tag">Why Lucieshine</span>
+  <h2 class="section-title">The Standard You Deserve</h2>
+  <p class="section-sub">We don't just clean and paint — we protect and elevate your biggest investment.</p>
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="icon">🛡️</div>
+      <h4>Fully Licensed & Insured</h4>
+      <p>Complete liability coverage and licensed professionals on every job.</p>
+    </div>
+    <div class="why-item">
+      <div class="icon">⚡</div>
+      <h4>Fast Response</h4>
+      <p>Same-week scheduling available. We show up on time, every time.</p>
+    </div>
+    <div class="why-item">
+      <div class="icon">💯</div>
+      <h4>Satisfaction Guarantee</h4>
+      <p>Not happy? We come back and make it right — no questions asked.</p>
+    </div>
+    <div class="why-item">
+      <div class="icon">🌱</div>
+      <h4>Eco-Friendly Products</h4>
+      <p>Safe for your family, pets, and the environment. Always.</p>
+    </div>
+    <div class="why-item">
+      <div class="icon">💳</div>
+      <h4>Easy Online Payment</h4>
+      <p>Secure Stripe checkout. Pay your deposit online and get an instant invoice.</p>
+    </div>
+    <div class="why-item">
+      <div class="icon">📸</div>
+      <h4>Before & After Photos</h4>
+      <p>See the transformation documented on every job we complete.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Booking Section -->
+<section id="booking">
+  <div class="booking-wrap">
+    <div class="booking-info">
+      <span class="section-tag">Book a Service</span>
+      <h2>Ready to Get Started?</h2>
+      <p>Fill out the form to request an appointment or get a free quote. We'll confirm within 2 hours during business hours.</p>
+      <div class="booking-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <h4>Tell Us About Your Property</h4>
+            <p>Homeowner or business, service type, and your preferred date.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <h4>Pay a Small Deposit Online</h4>
+            <p>Secure your spot with a $25 deposit via Stripe. Fully credited to your invoice.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <h4>We Arrive & Get to Work</h4>
+            <p>Our crew arrives on time and delivers spotless results.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h3>📅 Book Your Appointment</h3>
+      <div id="bookingForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="fname" placeholder="Maria" required />
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="lname" placeholder="Johnson" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="you@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="(561) 000-0000" required />
+        </div>
+
+        <div class="form-group">
+          <label>Client Type</label>
+          <div class="radio-group">
+            <div class="radio-btn">
+              <input type="radio" name="clientType" id="homeowner" value="Homeowner" checked />
+              <label for="homeowner">🏠 Homeowner</label>
+            </div>
+            <div class="radio-btn">
+              <input type="radio" name="clientType" id="business" value="Business" />
+              <label for="business">🏢 Business</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Service Needed</label>
+          <select id="service">
+            <option value="">— Select a Service —</option>
+            <option value="Pressure Washing">🚿 Pressure Washing</option>
+            <option value="Exterior Painting">🎨 Exterior Painting</option>
+            <option value="Interior Painting">🏠 Interior Painting</option>
+            <option value="Roof Cleaning">🏚️ Roof Cleaning</option>
+            <option value="Gutter Cleaning">🌿 Gutter Cleaning</option>
+            <option value="Multiple Services">⚡ Multiple Services</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Preferred Date</label>
+            <input type="date" id="prefDate" />
+          </div>
+          <div class="form-group">
+            <label>Preferred Time</label>
+            <select id="prefTime">
+              <option value="Morning (8am-12pm)">Morning (8–12pm)</option>
+              <option value="Afternoon (12pm-4pm)">Afternoon (12–4pm)</option>
+              <option value="Flexible">Flexible</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Property Address</label>
+          <input type="text" id="address" placeholder="123 Main St, City, FL" required />
+        </div>
+
+        <div class="form-group">
+          <label>Additional Details</label>
+          <textarea id="details" placeholder="Tell us more about your property, size, any specific concerns..."></textarea>
+        </div>
+
+        <!-- Stripe Deposit -->
+        <div class="form-group">
+          <label>💳 Secure $25 Deposit (Stripe)</label>
+          <div id="card-element-wrap">
+            <div id="card-element"><!-- Stripe injects here --></div>
+          </div>
+          <div id="card-errors"></div>
+          <p class="deposit-note">🔒 Secured by Stripe. $25 deposit credited to your final invoice.</p>
+        </div>
+
+        <button class="submit-btn" id="submitBtn" onclick="handleSubmit(event)">
+          ✅ Confirm Booking & Pay Deposit
+        </button>
+      </div>
+
+      <div class="form-success" id="formSuccess">
+        <div class="check">🎉</div>
+        <h3>You're Booked!</h3>
+        <p>Thank you! We've received your booking request. Check your email for confirmation and your invoice. We'll call to confirm your appointment within 2 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section id="reviews">
+  <span class="section-tag">Reviews</span>
+  <h2 class="section-title">What Our Clients Say</h2>
+  <p class="section-sub">Real results, real people. See why hundreds trust Lucieshine for their property.</p>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>"My driveway looks brand new! The team was professional, fast, and incredibly thorough. Will absolutely book again."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">TM</div>
+        <div>
+          <div class="reviewer-name">Tanya M.</div>
+          <div class="reviewer-type">Homeowner · Pressure Washing</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>"We had our entire commercial building exterior painted. Flawless work, on-time, and our clients keep complimenting the curb appeal."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">RK</div>
+        <div>
+          <div class="reviewer-name">Robert K.</div>
+          <div class="reviewer-type">Business Owner · Exterior Painting</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>"Gutters were completely blocked and they cleared everything same week I called. Honest pricing and really clean job."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">SC</div>
+        <div>
+          <div class="reviewer-name">Sandra C.</div>
+          <div class="reviewer-type">Homeowner · Gutter Cleaning</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>"Interior painting in 3 rooms — zero mess, perfect edges, and done in a single day. These guys are pros."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">DJ</div>
+        <div>
+          <div class="reviewer-name">David J.</div>
+          <div class="reviewer-type">Homeowner · Interior Painting</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>"Roof had black streaks all over it. After soft washing it literally looks like a new roof. Worth every penny!"</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">AM</div>
+        <div>
+          <div class="reviewer-name">Angela M.</div>
+          <div class="reviewer-type">Homeowner · Roof Cleaning</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>"Online booking was so easy and I got a confirmation right away. The actual service matched the professionalism of the website."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">LP</div>
+        <div>
+          <div class="reviewer-name">Luis P.</div>
+          <div class="reviewer-type">Business Owner · Pressure Washing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">Lucie<span>shine</span></a>
+      <p>Professional exterior and interior services for homeowners and businesses. Licensed, insured, and satisfaction guaranteed.</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Pressure Washing</a></li>
+        <li><a href="#services">Exterior Painting</a></li>
+        <li><a href="#services">Interior Painting</a></li>
+        <li><a href="#services">Roof Cleaning</a></li>
+        <li><a href="#services">Gutter Cleaning</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul class="footer-contact">
+        <li>📞 <a href="tel:+15612488617">(561) 248-8617</a></li>
+        <li>📧 <a href="mailto:info@lucieshineservices.com">info@lucieshineservices.com</a></li>
+        <li>📍 South Florida</li>
+        <li>⏰ Mon–Sat: 7am–6pm</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Lucieshine Services · lucieshineservices.com · All rights reserved.</span>
+    <div class="stripe-badge">🔒 Payments secured by Stripe</div>
+  </div>
+</footer>
+
+<!-- Floating CTA -->
+<a href="#booking" class="floating-cta">📅 Book Now</a>
+
+<script>
+  // ── Stripe Setup ──
+  // 🔑 REPLACE with your real Stripe publishable key from dashboard.stripe.com
+  const STRIPE_PK = 'pk_test_REPLACE_WITH_YOUR_STRIPE_KEY';
+  let stripe, cardElement;
+
+  try {
+    stripe = Stripe(STRIPE_PK);
+    const elements = stripe.elements({
+      fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=DM+Sans&display=swap' }]
+    });
+    cardElement = elements.create('card', {
+      style: {
+        base: {
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: '15px',
+          color: '#2a3428',
+          '::placeholder': { color: '#a0a8a0' }
+        }
+      }
+    });
+    cardElement.mount('#card-element');
+    cardElement.on('change', ({ error }) => {
+      document.getElementById('card-errors').textContent = error ? error.message : '';
+    });
+  } catch(e) {
+    document.getElementById('card-element-wrap').innerHTML =
+      '<p style="color:#6b7c69;font-size:0.85rem;">💳 Card input loads after you add your Stripe key</p>';
+  }
+
+  // ── Form Submit ──
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const fname = document.getElementById('fname').value;
+    const email = document.getElementById('email').value;
+    const service = document.getElementById('service').value;
+
+    if (!fname || !email || !service) {
+      alert('Please fill in your name, email, and service type.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '⏳ Processing...';
+
+    try {
+      if (stripe && cardElement) {
+        // Create payment method
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+          billing_details: {
+            name: `${fname} ${document.getElementById('lname').value}`,
+            email: email,
+            phone: document.getElementById('phone').value,
+          }
+        });
+
+        if (error) {
+          document.getElementById('card-errors').textContent = error.message;
+          btn.disabled = false;
+          btn.textContent = '✅ Confirm Booking & Pay Deposit';
+          return;
+        }
+
+        // 🔧 Send paymentMethod.id + booking data to your backend here
+        console.log('Payment Method Created:', paymentMethod.id);
+        // Example: await fetch('/api/booking', { method:'POST', body: JSON.stringify({ pmId: paymentMethod.id, ...formData }) })
+      }
+
+      // Show success
+      document.getElementById('bookingForm').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+
+    } catch(err) {
+      btn.disabled = false;
+      btn.textContent = '✅ Confirm Booking & Pay Deposit';
+      alert('Something went wrong. Ple
